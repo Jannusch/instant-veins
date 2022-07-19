@@ -12,5 +12,7 @@ if test -n ${VERSION}; then
 	SET_VERSION_A="-var"
 	SET_VERSION_B="version=${VERSION}"
 fi
-
-packer build ${SET_VERSION_A} ${SET_VERSION_B} -on-error=ask instant-veins.json
+packer init .
+packer fmt .
+packer validate .
+packer build ${SET_VERSION_A} ${SET_VERSION_B} -on-error=ask instant-veins.pkr.hcl 
