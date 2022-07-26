@@ -1,6 +1,18 @@
 #!/bin/bash
 set -exu
 
+user_name=${1:-veins}
+if [ $user_name != 'veins' ]; then
+	# replace user in ansible playbook
+	sed -i "s/user: \"veins\"/user: $user_name/g" ansible/instant_veins.yml	
+	sed -i "s/\"Veins/\"$user_name/g" ansible/instant_veins.yml
+	# replace user in scripts
+	sed -i "s/veins/$user_name/g" scripts/preseed.cfg
+	sed -i "s/veins/$user_name/g" scripts/post.sh
+	sed -i "s/veins/$user_name/g" scripts/pre.sh
+	
+fi
+
 echo '=> checking SHA1 sums'
 (cd files; shasum --algorithm 1 --check SHA1SUMS)
 

@@ -21,6 +21,10 @@
 #
 - hosts: all
   become: true
+  vars:
+    user: "veins"
+    password: "$6$nkDuo0SdUXR8Im$4g8tXbIruu1YLimqImncK0pQ2EDzMuQjBwt8QRxS9L11NxvYCZarFdLvCwK28S.pF7aG2QpwUlG9J5i9GkYZB0" # hash of veins
+    comment: "Veins (password is veins),,,"
   roles:
     - base
     - omnetpp
