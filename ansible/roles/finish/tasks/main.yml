@@ -246,4 +246,5 @@
     src: finish_build_veins.sh
     dest: ~/.finish_build_veins.sh
     mode: '0755'
+  when: not internal
 
