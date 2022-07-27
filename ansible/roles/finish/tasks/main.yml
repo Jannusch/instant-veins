@@ -173,6 +173,7 @@
         echo "not the first login"
       else
         gnome-help &
+        $HOME/.finish_build_veins.sh
         touch ."{{user}}"-first-login
       fi
     dest: /home/{{user}}/.gnomerc
@@ -238,4 +239,11 @@
       org.eclipse.ui.navigator.ProjectExplorer.filterActivation=\:org.eclipse.ui.navigator.resources.filters.startsWithDot\:org.eclipse.cdt.ui.navigator.filters.ForwardDeclarationFilter\:
     dest: /home/{{user}}/workspace.omnetpp/.metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.ui.navigator.prefs
     mode: 0644
+  
+- name: Copy build script for veins
+  become_user: "{{user}}"
+  copy:
+    src: finish_build_veins.sh
+    dest: ~/.finish_build_veins.sh
+    mode: '0766'
 
