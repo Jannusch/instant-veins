@@ -11,7 +11,7 @@ if [ $user_name != 'veins' ]; then
 	sed -i "s/veins/$user_name/g" scripts/post.sh
 	sed -i "s/veins/$user_name/g" scripts/pre.sh
 	# replace user in pkr.hcl file
-	sed -i "s/= \"veins\"/= \"$user_name\"/g" instant-veins.pkr.hcl
+	sed -i "s/ssh_username         = \"veins\"/ssh_username         = \"$user_name\"/g" instant-veins.pkr.hcl
 
 	
 fi

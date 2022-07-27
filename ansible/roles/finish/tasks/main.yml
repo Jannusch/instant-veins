@@ -148,7 +148,7 @@
   become_user: "{{user}}"
   copy:
     src: "veins-background.jpg"
-    dest: "/home/"{{user}}"/Documents/veins-background.jpg"
+    dest: "/home/{{user}}/Documents/veins-background.jpg"
     mode: 0644
 
 - name: Background

@@ -42,9 +42,9 @@
 - name: Configure user
   user:
     name: "{{ user }}"
-    comment: {{ comment }}
+    comment: "{{ comment }}"
     shell: /bin/zsh
-    password: {{ password }}
+    password: "{{ password }}"
     groups: sudo,cdrom,floppy,dip,video,audio,plugdev,netdev,bluetooth
     append: yes
 

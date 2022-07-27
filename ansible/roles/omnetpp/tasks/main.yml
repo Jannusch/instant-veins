@@ -72,14 +72,14 @@
     creates: "/home/{{user}}/src/{{ omnetpp_dir }}"
 
 - name: Create symlink
-  become_user: "{{user}}""
+  become_user: "{{user}}"
   file:
     src: "/home/{{user}}/src/{{ omnetpp_dir }}"
     dest: /home/{{user}}/src/omnetpp
     state: link
 
 - name: Add to path
-  become_user: "{{user}}""
+  become_user: "{{user}}"
   lineinfile:
     dest: /home/{{user}}/.shrc
     line: 'PATH="$PATH:$HOME/src/omnetpp/bin"'
