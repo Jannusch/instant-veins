@@ -7,9 +7,12 @@ if [ $user_name != 'veins' ]; then
 	sed -i "s/user: \"veins\"/user: $user_name/g" ansible/instant-veins.yml	
 	sed -i "s/\"Veins/\"$user_name/g" ansible/instant-veins.yml
 	# replace user in scripts
-	sed -i "s/veins/$user_name/g" scripts/preseed.cfg
+	sed -i "s/passwd\/username string veins/passwd\/username string $user_name/g" scripts/preseed.cfg
 	sed -i "s/veins/$user_name/g" scripts/post.sh
 	sed -i "s/veins/$user_name/g" scripts/pre.sh
+	# replace user in pkr.hcl file
+	sed -i "s/= \"veins\"/= \"$user_name\"/g" instant-veins.pkr.hcl
+
 	
 fi
 
