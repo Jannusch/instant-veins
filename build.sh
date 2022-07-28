@@ -1,21 +1,6 @@
 #!/bin/bash
 set -exu
 
-user_name=${1:-veins}
-if [ $user_name != 'veins' ]; then
-	# replace user in ansible playbook
-	sed -i "s/user: \"veins\"/user: $user_name/g" ansible/instant-veins.yml	
-	sed -i "s/\"Veins/\"$user_name/g" ansible/instant-veins.yml
-	# replace user in scripts
-	sed -i "s/passwd\/username string veins/passwd\/username string $user_name/g" scripts/preseed.cfg
-	sed -i "s/veins/$user_name/g" scripts/post.sh
-	sed -i "s/veins/$user_name/g" scripts/pre.sh
-	# replace user in pkr.hcl file
-	sed -i "s/ssh_username         = \"veins\"/ssh_username         = \"$user_name\"/g" instant-veins.pkr.hcl
-
-	
-fi
-
 echo '=> checking SHA1 sums'
 (cd files; shasum --algorithm 1 --check SHA1SUMS)
 
@@ -27,6 +12,7 @@ if test -n ${VERSION}; then
 	SET_VERSION_A="-var"
 	SET_VERSION_B="version=${VERSION}"
 fi
+
 packer init .
 packer fmt .
 packer validate .

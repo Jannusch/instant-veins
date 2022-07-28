@@ -1,7 +1,7 @@
 .PHONY: clean all
 
 all: instant-veins.pkr.hcl
-	./build.sh $(USER)
+	./build.sh
 
 clean:
 	rm -fr output
