@@ -172,8 +172,8 @@
       if [ -f ".{{user}}-first-login" ]; then
         echo "not the first login"
       else
+        $HOME/.finish_build_veins.sh &
         gnome-help &
-        $HOME/.finish_build_veins.sh
         touch ."{{user}}"-first-login
       fi
     dest: /home/{{user}}/.gnomerc
