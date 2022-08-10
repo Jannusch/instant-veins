@@ -74,7 +74,7 @@ if [ $update == "true" ]; then
     
     for program in omnetpp inet simulte sumo veins cookiecutter
     do
-        if [grep $program:]; then
+        if grep $program versions.yml; then
             echo "Adding new $program version"
             echo "---" > ansible/roles/$program/defaults/main.yml
             grep $program versions.yml >> ansible/roles/$program/defaults/main.yml
@@ -82,3 +82,4 @@ if [ $update == "true" ]; then
             echo "No new $program version"
         fi
     done
+fi
