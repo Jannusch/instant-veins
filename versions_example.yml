@@ -1,5 +1,6 @@
 # This file is contains all possible variables that could be changed.
 # It is not necessary to include all programs but it is necessary to include all variables of one program if this program is included
+# The correct name of this file must be versions.yml
 ---
 omnetpp_tarball_url: https://github.com/omnetpp/omnetpp/releases/download/omnetpp-5.7/omnetpp-5.7-linux-x86_64.tgz
 omnetpp_tarball_filename: omnetpp-5.7-linux-x86_64.tgz
