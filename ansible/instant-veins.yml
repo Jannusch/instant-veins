@@ -33,6 +33,7 @@
     - inet
     - cookiecutter
     - veins
+    - { role: finish_veins_build, when: "not internal"}
     - simulte
     - finish
 
