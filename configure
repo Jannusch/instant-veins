@@ -1,14 +1,17 @@
 #!/bin/bash
 
-if [ $1 == "--help" ]; then
-    echo "This script checks all needed dependencies and allow optional configuration."
-    echo ""
-    echo "Usage: ./configure [--help] [options]"
-    echo "Options:"
-    echo "  --user-name     Change the default user name"
-    echo "  --internal      Switches to internal build and compile veins completly"
-    echo "  --update        Checks for new versions based on the versions.yml file"
-    exit 0
+if [ $1 ]; then
+    if  [ $1 == "--help" ]; then
+        echo "This script checks all needed dependencies and allow optional configuration."
+        echo ""
+        echo "Usage: ./configure [--help] [options]"
+        echo "Options:"
+        echo "  --user-name     Change the default user name"
+        echo "  --internal      Switches to internal build and compile veins completly"
+        echo "  --update        Checks for new versions based on the versions.yml file"
+        echo "  --url           Address of versions.yml file"
+        exit 0
+    fi
 fi
 
 set -eu
@@ -31,6 +34,7 @@ pararser() {
     user_name=${user_name:-veins}
     internal=${internal:-false}
     update=${update:-false}
+    url=${url:-none}
 
     # Assign the values given by the user
     while [ $# -gt 0 ]; do
@@ -65,7 +69,19 @@ echo ""
 	sed -i "s/ssh_username         = \"veins\"/ssh_username         = \"$user_name\"/g" instant-veins.pkr.hcl
 fi
 
+if [ $URL ]; then
+    echo "Downloading versions.yml file"
+    wget $URL -O versions.yml
+    echo "$URL">> versions.yml
+fi
+
 if [ $update == "true" ]; then
+
+    if grep URL versions.yml; then
+        echo "Downloading new versions.yml"
+        wget $(grep URL versions.yml)
+    fi
+
     FILE="versions.yml"
     if ! test -f "$FILE"; then
         echo "$FILE does not exist."

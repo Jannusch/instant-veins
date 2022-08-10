@@ -14,3 +14,4 @@ sumo_tarball_sha1: 2dbdc23c9942c770bd9363ca5f1861c4b46afa63
 sumo_dir: sumo-1.11.0
 veins_version: veins-5.2
 cookiecutter_veins_project_version: 1.2
+URL: https://example.com/versions.yml # this var could be set as an remote address for version.yml file (e.g. CI/CD system)
