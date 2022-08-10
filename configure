@@ -64,5 +64,3 @@ echo ""
 	# replace user in pkr.hcl file
 	sed -i "s/ssh_username         = \"veins\"/ssh_username         = \"$user_name\"/g" instant-veins.pkr.hcl
 fi
-
-if [ $update == "true" ]; then
