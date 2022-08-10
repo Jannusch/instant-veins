@@ -1,56 +1,46 @@
 #!/bin/bash
-(# build veins
-source ~/.shrc
-cd ~/src/veins
-./configure
-make -j2
+echo '
+---
+#
+# Ansible Playbook for building Instant Veins
+# Copyright (C) 2018 Christoph Sommer <sommer@ccs-labs.org>
+#
+# Documentation for this template is at http://veins.car2x.org/
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+- hosts: localhost
+  connection: local
+  vars:
+    user: "veins"
+    password: "$6$nkDuo0SdUXR8Im$4g8tXbIruu1YLimqImncK0pQ2EDzMuQjBwt8QRxS9L11NxvYCZarFdLvCwK28S.pF7aG2QpwUlG9J5i9GkYZB0" # hash of veins
+    comment: "Veins (password is veins),,,"
+    internal: false
+  roles:
+    - finish_veins_build
+' > playbook.yml
 
-echo "40";
-echo "# Build doxygen for veins";
-
-# build doxygen for veins
-source ~/.shrc
-cd ~/src/veins
-make doxy
-
-echo "50";
-echo "# Build veins INET";
-
-# build veins INET
-source ~/.shrc
-cd ~/src/veins/subprojects/veins_inet
-./configure
-make -j2
-
-echo "60";
-echo "# Import veins into workspace";
-
-# import veins into workspace
-cd ~/src/veins
-source ~/.shrc
-xvfb-run ~/src/omnetpp/ide/omnetpp -data ~/workspace.omnetpp -nosplash -application org.eclipse.cdt.managedbuilder.core.headlessbuild -import .
-
-echo "70";
-echo "# Import INET into veins";
-
-# import INET into veins
-cd ~/src/veins/subprojects/veins_inet
-source ~/.shrc
-xvfb-run ~/src/omnetpp/ide/omnetpp -data ~/workspace.omnetpp -nosplash -application org.eclipse.cdt.managedbuilder.core.headlessbuild -import .
-
-echo "90";
-echo "# add setenv script";
-
-# add setenv script
-STRING='cd "$HOME/src/veins" && . ./setenv > /dev/null; cd - > /dev/null'
-FILE="~/.shrc"
-if not grep -q "$STRING" "$FILE"; then
-    echo $STRING >> ~/.shrc
-fi
-
-echo "100";
-echo "# Finished";
-
+(
+    ansible-playbook playbook.yml > final_build.log && 
+    echo "80";
+    echo "# removing files";
+    rm -rf ~/.ansible/roles
+    rm -rf ~/final_build.log
+    echo "90";
+    echo "# sync filesystem";
+    sync
 ) |
 zenity --progress \
     --title="Finish veins build" \

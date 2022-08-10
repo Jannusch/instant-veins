@@ -243,8 +243,8 @@
 - name: Copy build script for veins
   become_user: "{{user}}"
   copy:
-    src: finish_build_veins.sh
-    dest: ~/.finish_build_veins.sh
+    src: ../../roles/finish_veins_build
+    dest: ~/.ansibel/roles
     mode: '0755'
   when: not internal
 
