@@ -28,10 +28,9 @@
   apt:
     state: present
     name:
-      - vim-gtk3
+      - vim
       - task-gnome-desktop
       - zsh
-      - terminator
       - git-core
       - gitk
       - git-gui
@@ -48,24 +47,6 @@
     groups: sudo,cdrom,floppy,dip,video,audio,plugdev,netdev,bluetooth
     append: yes
 
-- name: Prepare for Virtualbox guest tools installation (packages)
-  apt:
-    state: present
-    name:
-      - linux-headers-amd64
-
-- name: Prepare for Virtualbox guest tools installation (group 1)
-  group:
-    state: present
-    name: vboxsf
-    system: yes
-
-- name: Prepare for Virtualbox guest tools installation (group 2)
-  user:
-    name: veins
-    groups: vboxsf
-    append: yes
-
 - name: Configure MOTD
   copy:
     content: |
@@ -76,12 +57,6 @@
       Welcome to Instant Veins!
     dest: /etc/motd
 
-- name: Make sure scripts can be executed from CDROM (VirtualBox guest additions need this)
-  replace:
-    dest: /etc/fstab
-    regexp: '(/media/cdrom0\s+udf,iso9660\s+)user,noauto(\s+)'
-    replace: '\1user,noauto,exec\2'
-
 - name: Disable (slow) DNS lookups for sshd
   replace:
     dest: /etc/ssh/sshd_config
@@ -90,11 +65,6 @@
   notify:
     - restart sshd
 
-- name: Install VMware guest tools
-  apt:
-    state: present
-    name:
-      - open-vm-tools-desktop
 
 - name: Create default directories for user
   file:
