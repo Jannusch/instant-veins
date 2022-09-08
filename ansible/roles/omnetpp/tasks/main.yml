@@ -95,6 +95,7 @@
     set -exu
     source ~/.shrc
     perl -p -i -e 's/WITH_OSGEARTH=yes/WITH_OSGEARTH=no/' configure.user
+    perl -p -i -e 's/WITH_QTENV=yes/WITH_QTENV=no/' configure.user
     xvfb-run ./configure
     make -j2
   args:
