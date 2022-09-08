@@ -37,6 +37,7 @@
       - tig
       - clang
       - ccache
+      - gcc
 
 - name: Configure user
   user:
