@@ -39,6 +39,9 @@
       - python3-numpy
       - python3-pandas
       - python3-matplotlib
+      . python3-dev
+      - gcc
+
 
 - name: Install base python packages
   pip:
