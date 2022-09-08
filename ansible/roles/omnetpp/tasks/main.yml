@@ -59,6 +59,7 @@
     - src
 
 - name: Download source
+  become_user: veins
   get_url:
     url: "{{ omnetpp_tarball_url }}"
     dest: "/home/veins/src/{{ omnetpp_tarball_filename }}"
