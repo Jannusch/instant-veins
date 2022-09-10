@@ -48,6 +48,7 @@
     - src
 
 - name: Download source
+  become_user: veins
   get_url:
     url: "{{ sumo_tarball_url }}"
     dest: "/home/veins/src/{{ sumo_tarball_filename }}"
