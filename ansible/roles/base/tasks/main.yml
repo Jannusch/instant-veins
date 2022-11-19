@@ -39,6 +39,8 @@
       - clang
       - ccache
       - python3-pip
+      - gcc
+      - python3-dev
 
 - name: Configure user
   user:
