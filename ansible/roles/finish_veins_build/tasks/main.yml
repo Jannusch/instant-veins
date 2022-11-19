@@ -21,70 +21,43 @@
 #
 
 
-- name: Create default directories
-  become_user: "{{user}}"
-  file:
-    path: /home/{{user}}/{{item}}
-    state: directory
-    owner: "{{user}}"
-    group: "{{user}}"
-    mode: 0755
-  with_items:
-    - src
 
-- name: Clone git
-  become_user: "{{user}}"
-  git:
-    repo: https://github.com/inet-framework/inet
-    dest: /home/{{user}}/src/inet
-    update: no
-
-- name: Prepare branch
-  become_user: "{{user}}"
-  shell: |
-    set -exu
-    git checkout -B v{{ inet_version }}-work v{{ inet_version }}
-    git submodule init
-    git submodule update
-  args:
-    executable: /bin/bash
-    chdir: /home/{{user}}/src/inet
-
-- name: Disable INETs use of pre-compiled headers
-  become_user: "{{user}}"
-  lineinfile:
-    dest: /home/{{user}}/.shrc
-    line: 'export USE_PRECOMPILED_HEADER=no'
-
-- name: Build INET in release mode
+- name: Build Veins
   become_user: "{{user}}"
   shell: |
     set -exu
     source ~/.shrc
-    opp_featuretool reset
-    make src/inet/features.h
-    make makefiles
-    make -j2 MODE=release
+    ./configure
+    make -j2
   args:
     executable: /bin/bash
-    chdir: /home/{{user}}/src/inet
-    creates: /home/{{user}}/src/inet/src/libINET.so
+    chdir: /home/{{user}}/src/veins
+    creates: /home/{{user}}/src/veins/src/libveins.so
 
-- name: Build INET in debug mode
+- name: Build Veins Doxygen
   become_user: "{{user}}"
   shell: |
     set -exu
     source ~/.shrc
-    opp_featuretool reset
-    make src/inet/features.h
-    make makefiles
-    make -j2 MODE=debug
+    make doxy
   args:
     executable: /bin/bash
-    chdir: /home/{{user}}/src/inet
-    creates: /home/{{user}}/src/inet/src/libINET_dbg.so
+    chdir: /home/{{user}}/src/veins
+    creates: /home/{{user}}/src/veins/doc/doxy/index.html
 
-- name: Import into Workspace
+- name: Build Veins_INET
+  become_user: "{{user}}"
+  shell: |
+    set -exu
+    source ~/.shrc
+    ./configure
+    make -j2
+  args:
+    executable: /bin/bash
+    chdir: /home/{{user}}/src/veins/subprojects/veins_inet
+    creates: /home/{{user}}/src/veins/subprojects/veins_inet/src/libveins_inet.so
+
+- name: Import Veins into Workspace
   become_user: "{{user}}"
   shell: |
     set -exu
@@ -92,6 +65,24 @@
     xvfb-run ~/src/omnetpp/ide/omnetpp -data ~/workspace.omnetpp -nosplash -application org.eclipse.cdt.managedbuilder.core.headlessbuild -import .
   args:
     executable: /bin/bash
-    chdir: /home/{{user}}/src/inet
-    creates: /home/{{user}}/workspace.omnetpp/.metadata/.plugins/org.eclipse.core.resources/.projects/inet
+    chdir: /home/{{user}}/src/veins
+    creates: /home/{{user}}/workspace.omnetpp/.metadata/.plugins/org.eclipse.core.resources/.projects/veins
+
+- name: Import Veins_INET into Workspace
+  become_user: "{{user}}"
+  shell: |
+    set -exu
+    source ~/.shrc
+    xvfb-run ~/src/omnetpp/ide/omnetpp -data ~/workspace.omnetpp -nosplash -application org.eclipse.cdt.managedbuilder.core.headlessbuild -import .
+  args:
+    executable: /bin/bash
+    chdir: /home/{{user}}/src/veins/subprojects/veins_inet
+    creates: /home/{{user}}/workspace.omnetpp/.metadata/.plugins/org.eclipse.core.resources/.projects/veins_inet
+
+- name: Add setenv script
+  become_user: "{{user}}"
+  lineinfile:
+    dest: /home/{{user}}/.shrc
+    line: 'cd "$HOME/src/veins" && . ./setenv > /dev/null; cd - > /dev/null'
+
 

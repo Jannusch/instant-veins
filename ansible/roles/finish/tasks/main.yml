@@ -22,12 +22,12 @@
 
 
 - name: Create default directories for user
-  become_user: veins
+  become_user: "{{ user }}"
   file:
-    path: /home/veins/{{item}}
+    path: /home/{{user}}/{{item}}
     state: directory
-    owner: veins
-    group: veins
+    owner: "{{ user }}"
+    group: "{{ user }}"
     mode: 0755
   with_items:
     - .local/share/applications
@@ -39,172 +39,173 @@
       - epiphany-browser
 
 - name: Launcher Entry
-  become_user: veins
+  become_user: "{{ user }}"
   copy:
     content: |
       [Desktop Entry]
       Type=Application
       Name=OMNeT++ IDE
-      Exec=omnetpp -data /home/veins/workspace.omnetpp -import /home/veins/src/veins/README.txt
-      Icon=/home/veins/src/omnetpp/ide/icon.xpm
+      Exec=omnetpp -data /home/{{ user }}/workspace.omnetpp -import /home/{{ user }}/src/veins/README.txt
+      Icon=/home/{{ user }}/src/omnetpp/ide/icon.xpm
       Categories=Science;
       StartupWMClass=OMNeT++ IDE
-    dest: /home/veins/.local/share/applications/omnetpp.desktop
+    dest: /home/{{ user }}/.local/share/applications/omnetpp.desktop
     mode: 0755
 
 - name: Launcher Entry
-  become_user: veins
+  become_user: "{{user}}"
   copy:
     content: |
       [Desktop Entry]
       Type=Application
       Name=veins_launchd
-      Exec=xterm -class veins_launchd -e /home/veins/src/veins/bin/veins_launchd -vv
+      Exec=xterm -class veins_launchd -e /home/{{user}}/src/veins/bin/veins_launchd -vv
       Icon=network-transmit-receive-symbolic
       Categories=Science;
       StartupWMClass=veins_launchd
-    dest: /home/veins/.local/share/applications/veins_launchd.desktop
+    dest: /home/{{user}}/.local/share/applications/veins_launchd.desktop
     mode: 0755
 
 - name: Profile directory for online documentation
   file:
-    path: /home/veins/.local/share/org.gnome.Epiphany.WebApp-veins-onlinedocs
+    path: /home/{{user}}/.local/share/org.gnome.Epiphany.WebApp-veins-onlinedocs
     state: directory
-    owner: veins
-    group: veins
+    owner: "{{user}}"
+    group: "{{user}}"
     mode: 0755
 
 - name: Launcher file for online documentation
-  become_user: veins
+  become_user: "{{user}}"
   copy:
     content: |
       [Desktop Entry]
       Type=Application
       Name=Veins documentation online
-      Exec=epiphany --application-mode --profile='/home/veins/.local/share/org.gnome.Epiphany.WebApp-veins-onlinedocs' 'http://veins.car2x.org/documentation/'
+      Exec=epiphany --application-mode --profile='/home/{{user}}/.local/share/org.gnome.Epiphany.WebApp-veins-onlinedocs' 'http://veins.car2x.org/documentation/'
       Icon=help-faq
       Categories=Science;
       StartupWMClass=org.gnome.Epiphany.WebApp-veins-onlinedocs
-    dest: /home/veins/.local/share/org.gnome.Epiphany.WebApp-veins-onlinedocs/org.gnome.Epiphany.WebApp-veins-onlinedocs.desktop
+    dest: /home/{{user}}/.local/share/org.gnome.Epiphany.WebApp-veins-onlinedocs/org.gnome.Epiphany.WebApp-veins-onlinedocs.desktop
     mode: 0755
 
 - name: App file for online documentation
-  become_user: veins
+  become_user: "{{user}}"
   copy:
     content: ""
-    dest: /home/veins/.local/share/org.gnome.Epiphany.WebApp-veins-onlinedocs/.app
+    dest: /home/{{user}}/.local/share/org.gnome.Epiphany.WebApp-veins-onlinedocs/.app
     mode: 0755
 
 - name: Launcher entry for online documentation
-  become_user: veins
+  become_user: "{{user}}"
   file:
-    src: /home/veins/.local/share/org.gnome.Epiphany.WebApp-veins-onlinedocs/org.gnome.Epiphany.WebApp-veins-onlinedocs.desktop
-    dest: /home/veins/.local/share/applications/org.gnome.Epiphany.WebApp-veins-onlinedocs.desktop
+    src: /home/{{user}}/.local/share/org.gnome.Epiphany.WebApp-veins-onlinedocs/org.gnome.Epiphany.WebApp-veins-onlinedocs.desktop
+    dest: /home/{{user}}/.local/share/applications/org.gnome.Epiphany.WebApp-veins-onlinedocs.desktop
     state: link
 
 - name: Profile directory for offline documentation
   file:
-    path: /home/veins/.local/share/org.gnome.Epiphany.WebApp-veins-offlinedocs
+    path: /home/{{user}}/.local/share/org.gnome.Epiphany.WebApp-veins-offlinedocs
     state: directory
-    owner: veins
-    group: veins
+    owner: "{{user}}"
+    group: "{{user}}"
     mode: 0755
 
 - name: Launcher file for offline documentation
-  become_user: veins
+  become_user: "{{user}}"
   copy:
     content: |
       [Desktop Entry]
       Type=Application
       Name=Veins source code documentation (offline)
-      Exec=epiphany --application-mode --profile='/home/veins/.local/share/org.gnome.Epiphany.WebApp-veins-offlinedocs' 'file:///home/veins/src/veins/doc/doxy/index.html'
+      Exec=epiphany --application-mode --profile='/home/{{user}}/.local/share/org.gnome.Epiphany.WebApp-veins-offlinedocs' 'file:///home/{{user}}/src/veins/doc/doxy/index.html'
       Icon=help-contents
       Categories=Science;
       StartupWMClass=org.gnome.Epiphany.WebApp-veins-offlinedocs
-    dest: /home/veins/.local/share/org.gnome.Epiphany.WebApp-veins-offlinedocs/org.gnome.Epiphany.WebApp-veins-offlinedocs.desktop
+    dest: /home/{{user}}/.local/share/org.gnome.Epiphany.WebApp-veins-offlinedocs/org.gnome.Epiphany.WebApp-veins-offlinedocs.desktop
     mode: 0755
 
 - name: App file for offline documentation
-  become_user: veins
+  become_user: "{{user}}"
   copy:
     content: ""
-    dest: /home/veins/.local/share/org.gnome.Epiphany.WebApp-veins-offlinedocs/.app
+    dest: /home/{{user}}/.local/share/org.gnome.Epiphany.WebApp-veins-offlinedocs/.app
     mode: 0755
 
 - name: Launcher entry for offline documentation
-  become_user: veins
+  become_user: "{{user}}"
   file:
-    src: /home/veins/.local/share/org.gnome.Epiphany.WebApp-veins-offlinedocs/org.gnome.Epiphany.WebApp-veins-offlinedocs.desktop
-    dest: /home/veins/.local/share/applications/org.gnome.Epiphany.WebApp-veins-offlinedocs.desktop
+    src: /home/{{user}}/.local/share/org.gnome.Epiphany.WebApp-veins-offlinedocs/org.gnome.Epiphany.WebApp-veins-offlinedocs.desktop
+    dest: /home/{{user}}/.local/share/applications/org.gnome.Epiphany.WebApp-veins-offlinedocs.desktop
     state: link
 
 - name: Favourites
-  become_user: veins
+  become_user: "{{user}}"
   shell: |
     set -exu
     xvfb-run gsettings set org.gnome.shell favorite-apps "['omnetpp.desktop', 'veins_launchd.desktop', 'org.gnome.Epiphany.WebApp-veins-onlinedocs.desktop', 'org.gnome.Epiphany.WebApp-veins-offlinedocs.desktop', 'firefox-esr.desktop', 'org.gnome.Nautilus.desktop', 'terminator.desktop']"
 
 - name: Copy background picture
-  become_user: veins
+  become_user: "{{user}}"
   copy:
     src: "veins-background.jpg"
-    dest: "/home/veins/Documents/veins-background.jpg"
+    dest: "/home/{{user}}/Documents/veins-background.jpg"
     mode: 0644
 
 - name: Background
-  become_user: veins
+  become_user: "{{user}}"
   shell: |
     set -exu
-    xvfb-run gsettings set org.gnome.desktop.background picture-uri 'file:///home/veins/Documents/veins-background.jpg'
+    xvfb-run gsettings set org.gnome.desktop.background picture-uri 'file:///home/{{user}}/Documents/veins-background.jpg'
 
 - name: Disable Screensaver
-  become_user: veins
+  become_user: "{{user}}"
   shell: |
     set -exu
     xvfb-run gsettings set org.gnome.desktop.session idle-delay 0
     xvfb-run gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-type "nothing"
 
 - name: Script for graphical login
-  become_user: veins
+  become_user: "{{user}}"
   copy:
     content: |
       # Show help on first login
-      if [ -f ".veins-first-login" ]; then
+      if [ -f ".{{user}}-first-login" ]; then
         echo "not the first login"
       else
+        $HOME/.finish_build_veins.sh &
         gnome-help &
-        touch .veins-first-login
+        touch ."{{user}}"-first-login
       fi
-    dest: /home/veins/.gnomerc
+    dest: /home/{{user}}/.gnomerc
     mode: 0755
 
 - name: Script for gnome login
-  become_user: veins
+  become_user: "{{user}}"
   copy:
     content: |
       # Load common environment variables and shell config
       . ~/.shrc
-    dest: /home/veins/.profile
+    dest: /home/{{user}}/.profile
     mode: 0755
 
 - name: Copy zshrc
-  become_user: veins
+  become_user: "{{user}}"
   copy:
     src: ".zshrc"
-    dest: "/home/veins/.zshrc"
+    dest: "/home/{{user}}/.zshrc"
     mode: 0755
 
 - name: Script for zsh login
-  become_user: veins
+  become_user: "{{user}}"
   copy:
     content: |
       # Load common environment variables and shell config
       . ~/.shrc
-    dest: /home/veins/.zprofile
+    dest: /home/{{user}}/.zprofile
     mode: 0755
 
 - name: Script for installing virtualbox-guest-tools
-  become_user: veins
+  become_user: "{{user}}"
   copy:
     content: |
       #!/bin/bash
@@ -216,26 +217,34 @@
       sudo /mnt/VBoxLinuxAdditions.run || echo "Installation aborted. This is not necessarily a problem, so continuing anyway."
       sudo umount /mnt
       echo Please reboot machine to make sure changes are applied...
-    dest: /home/veins/bin/virtualbox-guest-install.sh
+    dest: /home/{{user}}/bin/virtualbox-guest-install.sh
     mode: 0755
 
 - name: Build Workspace
-  become_user: veins
+  become_user: "{{user}}"
   shell: |
     set -exu
-    source /home/veins/.shrc
-    xvfb-run /home/veins/src/omnetpp/ide/omnetpp --launcher.suppressErrors -data /home/veins/workspace.omnetpp -nosplash -application org.eclipse.cdt.managedbuilder.core.headlessbuild -build all || echo "build all: exit code $? is suppressed"
+    source /home/{{user}}/.shrc
+    xvfb-run /home/{{user}}/src/omnetpp/ide/omnetpp --launcher.suppressErrors -data /home/{{user}}/workspace.omnetpp -nosplash -application org.eclipse.cdt.managedbuilder.core.headlessbuild -build all || echo "build all: exit code $? is suppressed"
   args:
     executable: /bin/bash
-    chdir: /home/veins/src
+    chdir: /home/{{user}}/src
 
 - name: Patch preferences to show (sub)projects in navigator without nesting
-  become_user: veins
+  become_user: "{{user}}"
   copy:
     content: |
       eclipse.preferences.version=1
       org.eclipse.ui.navigator.ProjectExplorer.activatedExtensions=org.eclipse.cdt.make.ui.makeTargets.content\=true;org.eclipse.ui.navigator.resourceContent\=true;org.eclipse.cdt.ui.navigator.content\=true;org.eclipse.egit.ui.changeSetContent\=false;org.eclipse.ui.navigator.resources.workingSets\=true;org.eclipse.team.ui.patchSyncNavigatorContent\=true;org.eclipse.team.ui.resourceContent\=true;org.eclipse.ui.navigator.resources.nested.nestedProjectContentProvider\=false;org.eclipse.egit.ui.RepositoriesViewContent\=true;org.omnetpp.navigator.content\=true;
       org.eclipse.ui.navigator.ProjectExplorer.filterActivation=\:org.eclipse.ui.navigator.resources.filters.startsWithDot\:org.eclipse.cdt.ui.navigator.filters.ForwardDeclarationFilter\:
-    dest: /home/veins/workspace.omnetpp/.metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.ui.navigator.prefs
+    dest: /home/{{user}}/workspace.omnetpp/.metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.ui.navigator.prefs
     mode: 0644
+  
+- name: Copy build script for veins
+  become_user: "{{user}}"
+  copy:
+    src: ../../roles/finish_veins_build
+    dest: ~/.ansibel/roles
+    mode: '0755'
+  when: not internal
 

@@ -21,7 +21,7 @@
 
 variable "version" {
   type    = string
-  default = "5.2-i1"
+  default = "5.2-i2"
 }
 
 packer {
@@ -39,9 +39,9 @@ source "virtualbox-iso" "instant-veins" {
     "files/debian-11.1.0-amd64-netinst.iso",
     "https://cdimage.debian.org/debian-cd/current/amd64/iso-cd/debian-11.4.0-amd64-netinst.iso"
   ]
-  iso_checksum         = "sha256:d490a35d36030592839f24e468a5b818c919943967012037d6ab3d65d030ef7f"
+  iso_checksum = "sha256:d490a35d36030592839f24e468a5b818c919943967012037d6ab3d65d030ef7f"
   headless             = true
-  disk_size            = 20480
+  disk_size            = 26480
   guest_additions_mode = "disable"
   guest_os_type        = "Debian 11"
   post_shutdown_delay  = "1m"

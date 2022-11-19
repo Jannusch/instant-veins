@@ -1,6 +1,6 @@
 .PHONY: clean all
 
-all: instant-veins.json
+all: instant-veins.pkr.hcl
 	./build.sh
 
 clean:

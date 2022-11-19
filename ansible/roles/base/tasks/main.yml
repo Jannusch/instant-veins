@@ -42,10 +42,10 @@
 
 - name: Configure user
   user:
-    name: veins
-    comment: "Veins (password is veins),,,"
+    name: "{{ user }}"
+    comment: "{{ comment }}"
     shell: /bin/zsh
-    password: "$6$nkDuo0SdUXR8Im$4g8tXbIruu1YLimqImncK0pQ2EDzMuQjBwt8QRxS9L11NxvYCZarFdLvCwK28S.pF7aG2QpwUlG9J5i9GkYZB0"
+    password: "{{ password }}"
     groups: sudo,cdrom,floppy,dip,video,audio,plugdev,netdev,bluetooth
     append: yes
 
@@ -63,7 +63,7 @@
 
 - name: Prepare for Virtualbox guest tools installation (group 2)
   user:
-    name: veins
+    name: "{{ user }}"
     groups: vboxsf
     append: yes
 
@@ -74,7 +74,7 @@
       Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
       permitted by applicable law.
 
-      Welcome to Instant Veins!
+      Welcome to Instant {{ user }}!
     dest: /etc/motd
 
 - name: Make sure scripts can be executed from CDROM (VirtualBox guest additions need this)
@@ -99,10 +99,10 @@
 
 - name: Create default directories for user
   file:
-    path: /home/veins/{{item}}
+    path: /home/{{ user }}/{{item}}
     state: directory
-    owner: veins
-    group: veins
+    owner: "{{ user }}"
+    group: "{{ user }}"
     mode: 0755
   with_items:
     - src
@@ -110,20 +110,20 @@
     - Documents
 
 - name: Create .shrc
-  become_user: veins
+  become_user: "{{ user }}"
   lineinfile:
-    dest: /home/veins/.shrc
+    dest: /home/{{ user }}/.shrc
     create: yes
     line: '# Common environment variables and shell config'
 
 - name: Update .shrc to include bin/ in PATH
   lineinfile:
-    dest: /home/veins/.shrc
+    dest: /home/{{ user }}/.shrc
     line: 'PATH="$PATH:$HOME/bin"'
 
 - name: Update .shrc for ccache
   lineinfile:
-    dest: /home/veins/.shrc
+    dest: /home/{{ user }}/.shrc
     line: 'PATH="/usr/lib/ccache:$PATH"'
 
 - name: Disable Wayland for GDM3
@@ -133,12 +133,12 @@
     replace: 'WaylandEnable=false'
 
 - name: Convenience script for running ansible playbook locally
-  become_user: veins
+  become_user: "{{ user }}"
   copy:
     content: |
       #!/bin/bash
       set -e
       ansible-playbook --connection=local --inventory 127.0.0.1, "$@"
-    dest: /home/veins/bin/ansible-playbook-local.sh
+    dest: /home/{{ user }}/bin/ansible-playbook-local.sh
     mode: 0755
 
