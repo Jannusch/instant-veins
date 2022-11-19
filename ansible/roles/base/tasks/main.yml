@@ -38,6 +38,7 @@
       - tig
       - clang
       - ccache
+      - python3-pip
 
 - name: Configure user
   user:
