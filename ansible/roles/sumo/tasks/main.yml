@@ -37,12 +37,12 @@
       - cmake
 
 - name: Create default directories
-  become_user: veins
+  become_user: "{{user}}"
   file:
-    path: /home/veins/{{item}}
+    path: /home/{{user}}/{{item}}
     state: directory
-    owner: veins
-    group: veins
+    owner: "{{user}}"
+    group: "{{user}}"
     mode: 0755
   with_items:
     - src
@@ -50,34 +50,34 @@
 - name: Download source
   get_url:
     url: "{{ sumo_tarball_url }}"
-    dest: "/home/veins/src/{{ sumo_tarball_filename }}"
+    dest: "/home/{{user}}/src/{{ sumo_tarball_filename }}"
     checksum: "sha1:{{ sumo_tarball_sha1 }}"
 
 - name: Unpack source
-  become_user: veins
+  become_user: "{{user}}"
   shell: |
     set -exu
     tar -xvf "{{ sumo_tarball_filename }}" --one-top-level="{{ sumo_dir }}" --strip-components 1
   args:
     executable: /bin/sh
-    chdir: /home/veins/src
-    creates: "/home/veins/src/{{ sumo_dir }}"
+    chdir: /home/{{user}}/src
+    creates: "/home/{{user}}/src/{{ sumo_dir }}"
 
 - name: Create symlink
-  become_user: veins
+  become_user: "{{user}}"
   file:
-    src: "/home/veins/src/{{ sumo_dir }}"
-    dest: /home/veins/src/sumo
+    src: "/home/{{user}}/src/{{ sumo_dir }}"
+    dest: /home/{{user}}/src/sumo
     state: link
 
 - name: Add to path
-  become_user: veins
+  become_user: "{{user}}"
   lineinfile:
-    dest: /home/veins/.shrc
+    dest: /home/{{user}}/.shrc
     line: 'PATH="$PATH:$HOME/src/sumo/bin"'
 
 - name: Build SUMO
-  become_user: veins
+  become_user: "{{user}}"
   shell: |
     set -exu
     source ~/.shrc
@@ -85,6 +85,6 @@
     make -j2
   args:
     executable: /bin/bash
-    chdir: /home/veins/src/sumo/build
-    creates: /home/veins/src/sumo/bin/sumo
+    chdir: /home/{{user}}/src/sumo/build
+    creates: /home/{{user}}/src/sumo/bin/sumo
 

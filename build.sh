@@ -12,6 +12,7 @@ if test -n ${VERSION}; then
 	SET_VERSION_A="-var"
 	SET_VERSION_B="version=${VERSION}"
 fi
+
 packer init .
 packer fmt .
 packer validate .

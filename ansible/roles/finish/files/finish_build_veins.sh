@@ -1,3 +1,5 @@
+#!/bin/bash
+echo '
 ---
 #
 # Ansible Playbook for building Instant Veins
@@ -19,21 +21,28 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-- hosts: all
-  become: true
+- hosts: localhost
+  connection: local
   vars:
     user: "veins"
     password: "$6$nkDuo0SdUXR8Im$4g8tXbIruu1YLimqImncK0pQ2EDzMuQjBwt8QRxS9L11NxvYCZarFdLvCwK28S.pF7aG2QpwUlG9J5i9GkYZB0" # hash of veins
     comment: "Veins (password is veins),,,"
     internal: false
   roles:
-    - base
-    - omnetpp
-    - sumo
-    - inet
-    - cookiecutter
-    - veins
-    - { role: finish_veins_build, when: "not internal"}
-    - simulte
-    - finish
+    - finish_veins_build
+' > playbook.yml
 
+(
+    ansible-playbook playbook.yml > final_build.log && 
+    echo "80";
+    echo "# removing files";
+    rm -rf ~/.ansible/roles
+    rm -rf ~/final_build.log
+    echo "90";
+    echo "# sync filesystem";
+    sync
+) |
+zenity --progress \
+    --title="Finish veins build" \
+    --text="Build veins" \
+    --percentage=0

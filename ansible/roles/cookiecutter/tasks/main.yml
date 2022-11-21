@@ -27,38 +27,38 @@
 
 - name: Create directories
   file:
-    path: /home/veins/{{item}}
+    path: /home/{{ user }}/{{item}}
     state: directory
-    owner: veins
-    group: veins
+    owner: "{{ user }}"
+    group: "{{ user }}"
     mode: 0755
   with_items:
     - .cookiecutters
 
 - name: Clone project
-  become_user: veins
+  become_user: "{{ user }}"
   git:
     repo: https://github.com/veins/cookiecutter-veins-project
-    dest: /home/veins/.cookiecutters/cookiecutter-veins-project
+    dest: /home/{{ user }}/.cookiecutters/cookiecutter-veins-project
     update: no
 
 - name: Prepare branch
-  become_user: veins
+  become_user: "{{ user }}"
   shell: |
     set -exu
     git checkout -B cookiecutter-veins-project-{{ cookiecutter_veins_project_version }}-work cookiecutter-veins-project-{{ cookiecutter_veins_project_version }}
   args:
     executable: /bin/bash
-    chdir: /home/veins/.cookiecutters/cookiecutter-veins-project
+    chdir: /home/{{ user }}/.cookiecutters/cookiecutter-veins-project
 
 - name: Script for running cookiecutter
-  become_user: veins
+  become_user: "{{ user }}"
   copy:
     content: |
       #!/bin/bash
       set -e
       cookiecutter cookiecutter-veins-project "$@"
-    dest: /home/veins/bin/cookiecutter-veins-project.sh
+    dest: /home/{{ user }}/bin/cookiecutter-veins-project.sh
     mode: 0755
 
 
