@@ -1,14 +1,17 @@
 #!/bin/bash
 
-if [ $1 == "--help" ]; then
-    echo "This script checks all needed dependencies and allow optional configuration."
-    echo ""
-    echo "Usage: ./configure [--help] [options]"
-    echo "Options:"
-    echo "  --user-name     Change the default user name"
-    echo "  --internal      Switches to internal build and compile veins completly"
-    echo "  --update        Checks for new versions based on the versions.yml file"
-    exit 0
+if [ $1 ]; then
+    if  [ $1 == "--help" ]; then
+        echo "This script checks all needed dependencies and allow optional configuration."
+        echo ""
+        echo "Usage: ./configure [--help] [options]"
+        echo "Options:"
+        echo "  --user-name                 Change the default user name"
+        echo "  --internal [ true | false]  Switches to internal build and compile veins completely"
+        echo "  --update [ true | false]    Checks for new versions based on the versions.yml file"
+        echo "  --url                       Address of versions.yml file"
+        exit 0
+    fi
 fi
 
 set -eu
@@ -26,11 +29,12 @@ echo "Checking for Perl shasum (tested with 5.84)"
 shasum --version
 
 
-pararser() {
+parser() {
     # Define default values
     user_name=${user_name:-veins}
     internal=${internal:-false}
     update=${update:-false}
+    url=${url:-none}
 
     # Assign the values given by the user
     while [ $# -gt 0 ]; do
@@ -43,12 +47,15 @@ pararser() {
 
 }
 
-pararser $@
+parser $@
 
 
 if [ $internal == "true" ]; then
     echo "Internal build"
     sed -i "s/internal: false/internal: true/g" ansible/instant-veins.yml
+else
+    echo "External build"
+    sed -i "s/internal: true/internal: false/g" ansible/instant-veins.yml
 fi
 
 if [ $user_name != "veins" ]; then
@@ -63,4 +70,39 @@ echo ""
 	sed -i "s/veins/$user_name/g" scripts/pre.sh
 	# replace user in pkr.hcl file
 	sed -i "s/ssh_username         = \"veins\"/ssh_username         = \"$user_name\"/g" instant-veins.pkr.hcl
+fi
+
+if [ $url != "none" ]; then
+    echo "Downloading versions.yml file"
+    wget --timeout=5 $url -O versions.yml
+    if grep URL versions.yml; then
+        sed -i "/URL/c\URL: $url" versions.yml
+    else
+        echo "$url">> versions.yml
+    fi
+fi
+
+if [ $update == "true" ]; then
+
+    if grep URL versions.yml; then
+        echo "Downloading new versions.yml"
+        wget --timeout=5 $(grep URL versions.yml) -O versions.yml
+    fi
+
+    FILE="versions.yml"
+    if ! test -f "$FILE"; then
+        echo "$FILE does not exist."
+        exit 1
+    fi
+    
+    for program in omnetpp inet simulte sumo veins cookiecutter
+    do
+        if grep $program versions.yml; then
+            echo "Adding new $program version"
+            echo "---" > ansible/roles/$program/defaults/main.yml
+            grep $program versions.yml >> ansible/roles/$program/defaults/main.yml
+        else 
+            echo "No new $program version"
+        fi
+    done
 fi

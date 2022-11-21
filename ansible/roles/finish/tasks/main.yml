@@ -172,7 +172,7 @@
       if [ -f ".{{user}}-first-login" ]; then
         echo "not the first login"
       else
-        $HOME/.finish_build_veins.sh &
+        terminator -m -T "Finish veins build" -e "$HOME/ansible/roles/finish/files/finish_build_veins.sh" &
         gnome-help &
         touch ."{{user}}"-first-login
       fi
@@ -246,8 +246,8 @@
 - name: Copy build script for veins
   become_user: "{{user}}"
   copy:
-    src: ../../roles/finish_veins_build
-    dest: ~/.ansibel/roles
+    src: ../../../.
+    dest: ~/ansible/
     mode: '0755'
   when: not internal
 

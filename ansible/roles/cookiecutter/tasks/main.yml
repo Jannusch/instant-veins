@@ -46,7 +46,7 @@
   become_user: "{{ user }}"
   shell: |
     set -exu
-    git checkout -B cookiecutter-veins-project-{{ cookiecutter_veins_project_version }}-work cookiecutter-veins-project-{{ cookiecutter_veins_project_version }}
+    git checkout -B cookiecutter-veins-project-{{ cookiecutter_version }}-work cookiecutter-veins-project-{{ cookiecutter_version }}
   args:
     executable: /bin/bash
     chdir: /home/{{ user }}/.cookiecutters/cookiecutter-veins-project
