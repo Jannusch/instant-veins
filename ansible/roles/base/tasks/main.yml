@@ -39,6 +39,8 @@
       - clang
       - ccache
       - python3-pip
+      - gcc
+      - python3-dev
 
 - name: Configure user
   user:
@@ -47,24 +49,6 @@
     shell: /bin/zsh
     password: "$6$nkDuo0SdUXR8Im$4g8tXbIruu1YLimqImncK0pQ2EDzMuQjBwt8QRxS9L11NxvYCZarFdLvCwK28S.pF7aG2QpwUlG9J5i9GkYZB0"
     groups: sudo,cdrom,floppy,dip,video,audio,plugdev,netdev,bluetooth
-    append: yes
-
-- name: Prepare for Virtualbox guest tools installation (packages)
-  apt:
-    state: present
-    name:
-      - linux-headers-amd64
-
-- name: Prepare for Virtualbox guest tools installation (group 1)
-  group:
-    state: present
-    name: vboxsf
-    system: yes
-
-- name: Prepare for Virtualbox guest tools installation (group 2)
-  user:
-    name: veins
-    groups: vboxsf
     append: yes
 
 - name: Configure MOTD
@@ -90,12 +74,6 @@
     replace: '\1'
   notify:
     - restart sshd
-
-- name: Install VMware guest tools
-  apt:
-    state: present
-    name:
-      - open-vm-tools-desktop
 
 - name: Create default directories for user
   file:

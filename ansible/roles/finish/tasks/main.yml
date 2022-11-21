@@ -32,11 +32,11 @@
   with_items:
     - .local/share/applications
 
-- name: Install base packages
-  apt:
-    state: present
-    name:
-      - epiphany-browser
+#- name: Install base packages
+#  apt:
+#    state: present
+#    name:
+#      - epiphany-browser
 
 - name: Launcher Entry
   become_user: veins
@@ -201,22 +201,6 @@
       # Load common environment variables and shell config
       . ~/.shrc
     dest: /home/veins/.zprofile
-    mode: 0755
-
-- name: Script for installing virtualbox-guest-tools
-  become_user: veins
-  copy:
-    content: |
-      #!/bin/bash
-      set -e
-      sudo sh -c "echo 'deb http://deb.debian.org/debian/ bullseye main non-free\ndeb http://security.debian.org/ bullseye-security main non-free\ndeb http://deb.debian.org/debian/ bullseye-updates main non-free\n' > /etc/apt/sources.list.d/debian-bullseye-nonfree.list"
-      sudo apt update
-      sudo apt install virtualbox-guest-additions-iso
-      sudo mount /usr/share/virtualbox/VBoxGuestAdditions.iso /mnt
-      sudo /mnt/VBoxLinuxAdditions.run || echo "Installation aborted. This is not necessarily a problem, so continuing anyway."
-      sudo umount /mnt
-      echo Please reboot machine to make sure changes are applied...
-    dest: /home/veins/bin/virtualbox-guest-install.sh
     mode: 0755
 
 - name: Build Workspace

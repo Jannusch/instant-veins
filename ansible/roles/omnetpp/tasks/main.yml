@@ -39,6 +39,10 @@
       - python3-numpy
       - python3-pandas
       - python3-matplotlib
+      - qtchooser 
+      - qt5-qmake 
+      - qtbase5-dev-tools
+      - libqt5opengl5-dev
 
 - name: Install base python packages
   pip:
