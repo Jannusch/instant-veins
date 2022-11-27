@@ -74,7 +74,7 @@ fi
 
 if [ $url != "none" ]; then
     echo "Downloading versions.yml file"
-    wget --timeout=5 $url -O versions.yml
+    curl --connect-timeout 5 $url -o versions.yml
     if grep URL versions.yml; then
         sed -i "/URL/c\URL: $url" versions.yml
     else
@@ -86,7 +86,7 @@ if [ $update == "true" ]; then
 
     if grep URL versions.yml; then
         echo "Downloading new versions.yml"
-        wget --timeout=5 $(grep URL versions.yml) -O versions.yml
+        curl --connect-timeout 5 $(grep URL versions.yml) -o versions.yml
     fi
 
     FILE="versions.yml"
