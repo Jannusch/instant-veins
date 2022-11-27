@@ -36,10 +36,10 @@ packer {
 
 source "virtualbox-iso" "instant-veins" {
   iso_urls = [
-    "files/debian-11.1.0-amd64-netinst.iso",
-    "https://cdimage.debian.org/debian-cd/current/amd64/iso-cd/debian-11.4.0-amd64-netinst.iso"
+    "files/debian-11.5.0-amd64-netinst.iso",
+    "https://cdimage.debian.org/debian-cd/current/amd64/iso-cd/debian-11.5.0-amd64-netinst.iso"
   ]
-  iso_checksum = "sha256:d490a35d36030592839f24e468a5b818c919943967012037d6ab3d65d030ef7f"
+  iso_checksum = "sha256:6a6607a05d57b7c62558e9c462fe5c6c04b9cfad2ce160c3e9140aa4617ab73aff7f5f745dfe51bbbe7b33c9b0e219a022ad682d6c327de0e53e40f079abf66a"
   headless             = true
   disk_size            = 26480
   guest_additions_mode = "disable"
