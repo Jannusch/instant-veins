@@ -32,11 +32,11 @@
   with_items:
     - .local/share/applications
 
-#- name: Install base packages
-#  apt:
-#    state: present
-#    name:
-#      - epiphany-browser
+- name: Install base packages
+  apt:
+    state: present
+    name:
+      - epiphany-browser
 
 - name: Launcher Entry
   become_user: "{{ user }}"
