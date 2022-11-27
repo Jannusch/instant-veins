@@ -51,8 +51,6 @@
     groups: sudo,cdrom,floppy,dip,video,audio,plugdev,netdev,bluetooth
     append: yes
 
-<<<<<<< HEAD
-=======
 - name: Prepare for Virtualbox guest tools installation (packages)
   apt:
     state: present
@@ -71,7 +69,6 @@
     groups: vboxsf
     append: yes
 
->>>>>>> d7a8a631b1021665fcb879be6c0c7b65462de56f
 - name: Configure MOTD
   copy:
     content: |
