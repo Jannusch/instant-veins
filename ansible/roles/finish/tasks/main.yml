@@ -204,8 +204,6 @@
     dest: /home/{{user}}/.zprofile
     mode: 0755
 
-<<<<<<< HEAD
-=======
 - name: Script for installing virtualbox-guest-tools
   become_user: "{{user}}"
   copy:
@@ -222,7 +220,6 @@
     dest: /home/{{user}}/bin/virtualbox-guest-install.sh
     mode: 0755
 
->>>>>>> d7a8a631b1021665fcb879be6c0c7b65462de56f
 - name: Build Workspace
   become_user: "{{user}}"
   shell: |
