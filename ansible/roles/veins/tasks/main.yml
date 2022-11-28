@@ -57,7 +57,7 @@
   become_user: "{{user}}"
   shell: |
     set -exu
-    git checkout -B veins-{{ veins_version }}-work {{ veins_version }}
+    git checkout {{ veins_version }}
   args:
     executable: /bin/bash
     chdir: /home/{{user}}/src/veins
